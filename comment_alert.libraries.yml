@@ -1,0 +1,6 @@
+comment_alert:
+  js:
+    js/comment_alert.js: {}
+  css:
+    layout:
+      css/style.css: {}

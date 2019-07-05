@@ -1,0 +1,23 @@
+{# Place/include this code in page.html.twig of theme#}
+{% if alerts%}
+    <details class="alertBox">
+        <summary class="alertSummary">{{ total_alerts }} new updates</summary>
+        <ul>
+            {% for alert in alerts%}
+                <div class="alertContainer" id="alert{{ alert.nid }}">
+                    <li><p class="alertMessage">+{{ alert.diff }} updates on page '<a href="{{ alert.alias }}" target="_blank">{{ alert.title }}</a>'! <button class="alertDismiss" onclick="dismissAlert({{ alert.nid }},{{ alert.alert_cc }},{{ alert.current_cc }})"></button></p></li>
+                </div>
+            {% endfor %}
+        </ul>
+    </details>
+{% endif %}
+
+
+{% if sub_button %}
+    <div class="unFollow">
+        <p id="cookieList">You are currently following this page</p>
+        {# btn for dev purposes -- list all the current cookies #}
+        {#<button onclick="listCookies()">List Cookies</button>#}
+        <button onclick="deleteCookie({{ nid }},{{ comment_count }})">Unfollow</button>
+    </div>
+{% endif %}

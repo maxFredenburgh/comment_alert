@@ -1,0 +1,65 @@
+/*Comment Alert*/
+.unFollow{
+    display:inline-block;
+    font-size: small;
+    padding: 4px;
+    background-color: #d8eeca;
+    border:#278400 solid;
+    border-radius: 5px;
+}
+.alertBox{
+    display:inline-block;
+    background-color: #d8eeca;
+}
+.alertSummary{
+    background-color: #278400;
+    color: white;
+}
+.alertSummary:active{
+    background-color: #278400;
+    color: white;
+}
+.alertSummary:hover{
+    background-color: #278400;
+    color: white;
+}
+.alertSummary:not(:active){
+    background-color: #278400;
+    color: white;
+}
+.alertContainer{
+    font-size: smaller;
+    border-radius: 5px;
+    list-style-image:url('https://api.iconify.design/ic:outline-comment.svg?color=%230a64c8a6');
+}
+.alertMessage{
+    font-size: smaller;
+    background-color: #82b2e85c;
+    border-radius: 5px;
+    display:inline-block;
+
+}
+.alertLink{
+    height: 20px;
+    width: 20px;
+    background: url('https://api.iconify.design/whh:enter.svg?color=%237ce439') no-repeat center center / contain;
+    border-style: none;
+}
+.alertLink:hover{
+    background: url('https://api.iconify.design/whh:enter.svg?color=%230a64c8a6') no-repeat center center / contain;
+    background-color: #7ce439;
+    border-radius: 5px;
+
+}
+.alertDismiss{
+    float: right;
+    margin-top: 2px;
+    height: 12px;
+    width: 12px;
+    background: url('https://api.iconify.design/whh:x.svg?color=%232b4e745c') no-repeat center center / contain;
+    border-style: none;
+}
+.alertDismiss:hover{
+    background: url('https://api.iconify.design/whh:x.svg?color=red') no-repeat center center / contain;
+}
+/*****/

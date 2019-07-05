@@ -1,0 +1,9 @@
+name: 'Comment Alert'
+description: 'Allow option to be alerted of replies to comments you post'
+type: module
+core: 8.x
+package: 'Open Government'
+dependencies:
+  - drupal:comment
+  - token:token
+
