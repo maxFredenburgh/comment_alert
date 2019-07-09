@@ -5,7 +5,7 @@
         <ul>
             {% for alert in alerts%}
                 <div class="alertContainer" id="alert{{ alert.nid }}">
-                    <li><p class="alertMessage">+{{ alert.diff }} updates on page '<a href="{{ alert.alias }}" target="_blank">{{ alert.title }}</a>'! <button class="alertDismiss" onclick="dismissAlert({{ alert.nid }},{{ alert.alert_cc }},{{ alert.current_cc }})"></button></p></li>
+                    <li><p class="alertMessage"> +{{ alert.diff }} updates on page '<a href="{{ alert.alias }}" target="_blank">{{ alert.title }}</a>'! <button class="alertDismiss" onclick="dismissAlert({{ alert.nid }},{{ alert.alert_cc }},{{ alert.current_cc }})"></button></p></li>
                 </div>
             {% endfor %}
         </ul>

@@ -15,14 +15,25 @@ use Drupal\user\Entity\User;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Cache\Cache;
 
+function comment_alert_theme($existing, $type, $theme, $path) {
 
-function comment_alert_preprocess_page(&$variables) {
+
+    return array(
+        'block__comment_alert' => array(
+            'variables' => array('title' => '', 'description' => ''),
+            'template' => 'block--comment-alert',
+        ),
+    );
+}
+
+function template_preprocess_block__comment_alert(&$variables) {
     //initialize variables to false
     $variables['sub_button']= false;
     $variables['message']= false;
     $send_alert=false;
 
     if(isset($_COOKIE['Drupal_visitor_notify_node'])){
+        $variables['#attached']['library'][] =  'comment_alert/comment_alert';
         //count how many nodes are being tracked
         //each separate tracking is delimited by ';'
         $all_alerts=preg_split('{;}',$_COOKIE['Drupal_visitor_notify_node']);
@@ -37,6 +48,7 @@ function comment_alert_preprocess_page(&$variables) {
             }
 
             $alert_data = preg_split('{:}',$all_alerts[$i]);
+
             $alert_nid=$alert_data[0];
             $alert_cc=$alert_data[1];
 
@@ -55,11 +67,10 @@ function comment_alert_preprocess_page(&$variables) {
         $node = \Drupal::routeMatch()->getParameter('node');
         //if user is viewing a node
         if ($node instanceof \Drupal\node\NodeInterface) {
+            Drupal::service('page_cache_kill_switch')->trigger();
             $current_page=$node->id();
             //and node is in the alert array
             if((in_array($current_page,$alert_nids))){
-                //dont cache and display unfollow button with var 'sub_button'
-                Drupal::service('page_cache_kill_switch')->trigger();
                 $variables['sub_button']= true;
 
                 //update_cookie to not notify of current node while viewing it
@@ -79,7 +90,6 @@ function comment_alert_preprocess_page(&$variables) {
         foreach ($alert_nids as $nid){
             if($alert_ccs[$nid]['alert_cc']!=$alert_ccs[$nid]['current_cc']){
                 $diff=$alert_ccs[$nid]['current_cc']-$alert_ccs[$nid]['alert_cc'];
-
                 $variables['alerts'][$nid]['nid']=$nid;
                 $variables['alerts'][$nid]['diff']=$diff;
                 $variables['alerts'][$nid]['alert_cc']=$alert_ccs[$nid]['alert_cc'];
@@ -113,6 +123,7 @@ function comment_alert_form_comment_form_alter(&$form, FormStateInterface $form_
 function _comment_alert_submit_comment_form(array &$form, FormStateInterface $form_state) {
     //if user wants to be notified
     if($form_state->getValue('notify')==true){
+        Drupal::service('page_cache_kill_switch')->trigger();
         //get nid of node comment was posted on
         $entity = $form_state->getFormObject()->getEntity();
         $nid = $entity->get('entity_id')->target_id;
@@ -124,15 +135,17 @@ function _comment_alert_submit_comment_form(array &$form, FormStateInterface $fo
         //if they are following another page
         //append this page to cookie
         if(isset($_COOKIE['Drupal_visitor_notify_node'])){
-            $current_cookie=$_COOKIE['Drupal_visitor_notify_node'];
-            $updated_cookie=$current_cookie.';'.$nid.':'.$comment_count;
-            user_cookie_save(['notify_node' => $updated_cookie]);
-
+            if(strpos($_COOKIE['Drupal_visitor_notify_node'], $nid.':'.$comment_count) == false){
+                $current_cookie=$_COOKIE['Drupal_visitor_notify_node'];
+                $updated_cookie=$current_cookie.';'.$nid.':'.$comment_count;
+                user_cookie_save(['notify_node' => $updated_cookie]);
+            }
         }
         //if first page to follow
         else{
             //create cookie
             user_cookie_save(['notify_node' => $nid.':'.$comment_count]);
+
         }
     }
 }

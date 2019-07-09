@@ -2,5 +2,5 @@ comment_alert:
   js:
     js/comment_alert.js: {}
   css:
-    layout:
+    theme:
       css/style.css: {}
